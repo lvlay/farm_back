@@ -31,19 +31,36 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+
+    <!--controller 异常同意处理-->
+    <bean id="exceptionResolver" class="com.taoroot.interceptor.MyExceptionHandler"/>
+
     <!--4: 扫描web相关的controller-->
     <context:component-scan base-package="com.taoroot.controller"/>
 
     <!--5: 控制权限 -->
     <mvc:interceptors>
+        <!-- token 拦截器 -->
         <mvc:interceptor>
             <mvc:mapping path="/*/*.do"/>
             <mvc:mapping path="/*/*/*.do"/>
             <mvc:mapping path="/*/*/*/*.do"/>
             <mvc:mapping path="/*/*/*/*/*.do"/>
             <mvc:exclude-mapping path="/api/v1/user/login.do"/>
+            <mvc:exclude-mapping path="/api/v1/user/register.do"/>
             <bean class="com.taoroot.interceptor.SpringMVCHandlerInterceptor"/>
         </mvc:interceptor>
+        <!-- API 拦截器 -->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/*/*.do"/>-->
+            <!--<mvc:mapping path="/*/*/*.do"/>-->
+            <!--<mvc:mapping path="/*/*/*/*.do"/>-->
+            <!--<mvc:mapping path="/*/*/*/*/*.do"/>-->
+            <!--<mvc:exclude-mapping path="/api/v1/user/login.do"/>-->
+            <!--<mvc:exclude-mapping path="/api/v1/user/register.do"/>-->
+            <!--<bean class="com.taoroot.interceptor.PermissionsHandlerInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+
     </mvc:interceptors>
 
 </beans>

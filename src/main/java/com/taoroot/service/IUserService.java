@@ -18,4 +18,10 @@ public interface IUserService {
     ServerResponse getUserById(int userId);
 
     ServerResponse update(User user, int userId);
+
+    ServerResponse checkValid(String str, String type);
+
+    ServerResponse register(User user);
+
+    boolean updateStatus(int userId);
 }

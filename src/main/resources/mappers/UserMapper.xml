@@ -181,6 +181,31 @@
         WHERE username = #{username}
     </select>
 
+
+    <select id="checkEmail" resultType="java.lang.Integer" parameterType="string">
+        SELECT count(1)
+        FROM farm_user
+        WHERE email = #{email,jdbcType=VARCHAR}
+    </select>
+
+    <select id="checkPhone" resultType="java.lang.Integer" parameterType="string">
+        SELECT count(1)
+        FROM farm_user
+        WHERE phone = #{phone,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectRole" resultType="java.lang.Integer" parameterType="int">
+        SELECT role
+        FROM farm_user
+        WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectStatus" resultType="java.lang.Integer" parameterType="int">
+        SELECT status
+        FROM farm_user
+        WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
     <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
         SELECT
         <include refid="Base_Column_List"/>
@@ -195,4 +220,6 @@
         FROM farm_user
         ORDER BY id asc
     </select>
+
+
 </mapper>

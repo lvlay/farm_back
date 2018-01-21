@@ -20,6 +20,14 @@ public interface UserMapper {
 
     int checkUsername(String name);
 
+    int checkEmail(String email);
+
+    int checkPhone(String email);
+
+    int selectRole(int userId);
+
+    int selectStatus(int userId);
+
     User selectLogin(@Param("username") String username, @Param("password") String password);
 
     List<User> selectList();

@@ -8,7 +8,6 @@ import java.util.Date;
  * @description:
  */
 public class UserVo {
-    private Integer id;
 
     private String username;
 
@@ -23,10 +22,6 @@ public class UserVo {
     private Date updateTime;
 
 
-    public UserVo setId(Integer id) {
-        this.id = id;
-        return this;
-    }
 
     public UserVo setUsername(String username) {
         this.username = username;
@@ -56,10 +51,6 @@ public class UserVo {
     public UserVo setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
         return this;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getUsername() {

@@ -1,6 +1,7 @@
 package com.taoroot.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.taoroot.common.ResponseCode;
 import com.taoroot.common.ServerResponse;
 import com.taoroot.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -59,7 +60,7 @@ public class SpringMVCHandlerInterceptor implements HandlerInterceptor {
 
         httpServletResponse.setContentType("application/json; charset=UTF-8");
         PrintWriter out = httpServletResponse.getWriter();
-        ServerResponse serverResponse = ServerResponse.createByErrorCodeMessage(10, "请重新登录");
+        ServerResponse serverResponse = ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "请重新登录");
         out.print(JSON.toJSON(serverResponse));
         out.close();
         return false;

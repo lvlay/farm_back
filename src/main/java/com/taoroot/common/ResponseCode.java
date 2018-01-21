@@ -9,8 +9,10 @@ public enum ResponseCode {
 
     SUCCESS(0,"SUCCESS"),
     ERROR(1,"ERROR"),
-    NEED_LOGIN(10,"NEED_LOGIN"),
-    ILLEGAL_ARGUMENT(2,"ILLEGAL_ARGUMENT");
+    NEED_LOGIN(3,"NEED_LOGIN"),
+    NEED_ADMIN(401, "NEED_ADMIN"),
+    ILLEGAL_ARGUMENT(400,"ILLEGAL_ARGUMENT"),
+    ERROR_BACKEND(401, "ERROR_BACKEND");
 
     private final int code;
     private final String desc;
