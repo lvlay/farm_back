@@ -1,11 +1,11 @@
 package com.taoroot.controller;
 
-import com.taoroot.common.LoginTypeCode;
 import com.taoroot.common.ResponseCode;
 import com.taoroot.common.ServerResponse;
 import com.taoroot.pojo.User;
 import com.taoroot.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author: taoroot
  * @date: 2018/1/13
- * @description:
+ * @description: 用户接口
  */
 @Controller
 @RequestMapping("/api/v1/user/")
@@ -22,6 +22,8 @@ public class UserController {
 
     @Autowired
     private IUserService iUserService;
+    @Autowired
+    RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 用户登录
@@ -57,7 +59,7 @@ public class UserController {
     public ServerResponse info(HttpServletRequest req) {
         int userId = (int) req.getAttribute("userId");
         // 对用户状态进行检查, 如果用户状态为禁用状态, 则失败
-        if(!iUserService.updateStatus(userId)) {
+        if (!iUserService.updateStatus(userId)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "已被禁用");
         }
         return iUserService.getUserById(userId);
@@ -68,11 +70,20 @@ public class UserController {
      *
      * @param pageNum  页号
      * @param pageSize 页大小
+     * @param title 搜索内容
+     * @param orderBy 排序方式
+     *
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "list.do", method = RequestMethod.GET)
-    public ServerResponse getList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageSize", defaultValue = "5") int pageSize, @RequestParam(value = "orderBy", defaultValue = "id desc") String orderBy) {
+    public ServerResponse getList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+                                  @RequestParam(value = "title", defaultValue = "") String title,
+                                  @RequestParam(value = "orderBy", defaultValue = "id desc") String orderBy) {
+        if (!title.equals("")) {
+            return iUserService.search(title, pageNum, pageSize, orderBy);
+        }
         return iUserService.getUserList(pageNum, pageSize, orderBy);
     }
 
@@ -92,8 +103,8 @@ public class UserController {
     /**
      * 检查用户名或邮箱是否已被占用
      *
-     * @param str
-     * @param type
+     * @param str 带检查的字符串
+     * @param type 判断检查类型
      * @return
      */
     @ResponseBody
@@ -104,6 +115,7 @@ public class UserController {
 
     /**
      * 注册用户
+     *
      * @param user
      * @return
      */
@@ -113,5 +125,14 @@ public class UserController {
         return iUserService.register(user);
     }
 
-
+    /**
+     * 获取一个星期的新增成员数
+     * @param type 0表示本星期, 1表示上个星期, 以此类推
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "new_user_count.do", method = RequestMethod.GET)
+    public ServerResponse new_user_count(@RequestParam(value = "type", defaultValue = "0") int type) {
+        return iUserService.getNewUserCount(type);
+    }
 }

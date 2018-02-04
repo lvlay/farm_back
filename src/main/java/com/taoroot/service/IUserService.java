@@ -24,4 +24,8 @@ public interface IUserService {
     ServerResponse register(User user);
 
     boolean updateStatus(int userId);
+
+    ServerResponse search(String str, int pageNum, int pageSize, String orderBy);
+
+    ServerResponse getNewUserCount(int type);
 }

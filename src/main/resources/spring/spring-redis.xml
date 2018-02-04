@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath*:redis.properties" ignore-unresolvable="true"/>
+    <!-- jedis 配置 -->
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxWaitMillis" value="${redis.maxWait}"/>
+    </bean>
+    <!-- redis服务器中心 -->
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="poolConfig" ref="poolConfig"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="hostName" value="${redis.host}"/>
+        <property name="password" value="${redis.password}"/>
+        <property name="timeout" value="${redis.timeout}"></property>
+    </bean>
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+    </bean>
+
+    <bean id="topicMessageListener" class="com.taoroot.redis.TopicMessageListener">
+        <property name="redisTemplate" ref="redisTemplate"/>
+    </bean>
+
+    <bean id="topicContainer" class="org.springframework.data.redis.listener.RedisMessageListenerContainer"
+          destroy-method="destroy">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <!-- 此处有个奇怪的问题，无法正确使用其他类型的Executor -->
+        <property name="taskExecutor">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+                <property name="poolSize" value="3"/>
+            </bean>
+        </property>
+        <property name="messageListeners">
+            <map>
+                <entry key-ref="topicMessageListener">
+                    <bean class="org.springframework.data.redis.listener.ChannelTopic">
+                        <constructor-arg value="${RedisAgentToBackTopic}"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    <!-- cache配置 -->
+    <!--<bean id="methodCacheInterceptor" class="com.mucfc.msm.common.MethodCacheInterceptor" >-->
+    <!--<property name="redisUtil" ref="redisUtil" />-->
+    <!--</bean >-->
+    <!--<bean id="redisUtil" class="com.mucfc.msm.common.RedisUtil" >-->
+    <!--<property name="redisTemplate" ref="redisTemplate" />-->
+    <!--</bean >-->
+</beans>

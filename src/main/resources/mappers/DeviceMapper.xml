@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taoroot.dao.DeviceMapper">
+    <resultMap id="BaseResultMap" type="com.taoroot.pojo.Device">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="did" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="model" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="token" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, did, model, token, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from farm_device
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM farm_device
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.taoroot.pojo.Device">
+        INSERT INTO farm_device (id, did, model,
+                                 token, create_time, update_time
+        )
+        VALUES (#{id,jdbcType=INTEGER}, #{did,jdbcType=VARCHAR}, #{model,jdbcType=INTEGER},
+                #{token,jdbcType=VARCHAR}, now(), now()
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.taoroot.pojo.Device">
+        insert into farm_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="did != null">
+                did,
+            </if>
+            <if test="model != null">
+                model,
+            </if>
+            <if test="token != null">
+                token,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="did != null">
+                #{did,jdbcType=VARCHAR},
+            </if>
+            <if test="model != null">
+                #{model,jdbcType=INTEGER},
+            </if>
+            <if test="token != null">
+                #{token,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoroot.pojo.Device">
+        update farm_device
+        <set>
+            <if test="did != null">
+                did = #{did,jdbcType=VARCHAR},
+            </if>
+            <if test="model != null">
+                model = #{model,jdbcType=INTEGER},
+            </if>
+            <if test="token != null">
+                token = #{token,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = now(),
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.taoroot.pojo.Device">
+        UPDATE farm_device
+        SET did         = #{did,jdbcType=VARCHAR},
+            model       = #{model,jdbcType=INTEGER},
+            token       = #{token,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = now()
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByDid" resultType="com.taoroot.pojo.Device">
+        select
+        <include refid="Base_Column_List"/>
+        from farm_device
+        where did = #{did,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectList" resultType="com.taoroot.pojo.Device">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM farm_device
+        WHERE did LIKE CONCAT(CONCAT('%', #{str}), '%')
+        ORDER BY id asc
+    </select>
+
+    <select id="selectListByUser" resultType="com.taoroot.pojo.Device">
+        SELECT device.*
+        FROM farm_user_device user_device
+            JOIN farm_user user ON user.id = user_device.user_id
+            JOIN farm_device device ON device.id = user_device.device_id
+        WHERE device.did LIKE CONCAT(CONCAT('%', #{str}), '%')
+              AND user.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="hasDeviceByUser" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM farm_user_device
+        WHERE device_id = #{deviceId,jdbcType=INTEGER}
+        AND user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+
+</mapper>

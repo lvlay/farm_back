@@ -32,14 +32,14 @@
     </delete>
     <insert id="insert" parameterType="com.taoroot.pojo.User">
         INSERT INTO farm_user (id, username, password,
-                               email, phone, question,
-                               answer, role, create_time,
-                               update_time, status, address)
+        email, phone, question,
+        answer, role, create_time,
+        update_time, status, address)
         VALUES (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-                                        #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-                                        #{question,jdbcType=VARCHAR},
-                                        #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, now(),
-                                        now(), #{status,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR})
+        #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+        #{question,jdbcType=VARCHAR},
+        #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, now(),
+        now(), #{status,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.taoroot.pojo.User">
         insert into farm_user
@@ -161,17 +161,17 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.taoroot.pojo.User">
         UPDATE farm_user
-        SET username    = #{username,jdbcType=VARCHAR},
-            password    = #{password,jdbcType=VARCHAR},
-            email       = #{email,jdbcType=VARCHAR},
-            phone       = #{phone,jdbcType=VARCHAR},
-            question    = #{question,jdbcType=VARCHAR},
-            answer      = #{answer,jdbcType=VARCHAR},
-            role        = #{role,jdbcType=INTEGER},
-            create_time = #{createTime,jdbcType=TIMESTAMP},
-            update_time = now(),
-            status      = #{status,jdbcType=INTEGER},
-            address     = #{address,jdbcType=VARCHAR}
+        SET username = #{username,jdbcType=VARCHAR},
+        password = #{password,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        question = #{question,jdbcType=VARCHAR},
+        answer = #{answer,jdbcType=VARCHAR},
+        role = #{role,jdbcType=INTEGER},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = now(),
+        status = #{status,jdbcType=INTEGER},
+        address = #{address,jdbcType=VARCHAR}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -219,6 +219,22 @@
         <include refid="Base_Column_List"/>
         FROM farm_user
         ORDER BY id asc
+    </select>
+
+    <select id="search" resultMap="BaseResultMap" parameterType="string">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM farm_user
+        WHERE username LIKE CONCAT(CONCAT('%', #{str}), '%')
+        OR email LIKE CONCAT(CONCAT('%', #{str}), '%')
+        OR phone LIKE CONCAT(CONCAT('%', #{str}), '%')
+        ORDER BY id asc
+    </select>
+
+    <select id="getNewUserCountByWeek" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM farm_user
+        WHERE to_days(create_time) = to_days(subdate(curdate(), date_format(curdate(), '%w') + #{day}));
     </select>
 
 

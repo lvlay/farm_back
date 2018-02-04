@@ -14,7 +14,6 @@ import java.util.Date;
 public class JwtUtil {
 
     private static String base64Security = "1234";
-    //    private static String base64Security=ConfigUtil.get("base64Security");
     public static String USERID = "userId";
     public static String TYPE = "type";
 

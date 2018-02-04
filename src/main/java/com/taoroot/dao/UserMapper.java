@@ -31,4 +31,8 @@ public interface UserMapper {
     User selectLogin(@Param("username") String username, @Param("password") String password);
 
     List<User> selectList();
+
+    List<User> search(String str);
+
+    int getNewUserCountByWeek(int type);
 }

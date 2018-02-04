@@ -8,15 +8,12 @@ import com.taoroot.pojo.User;
 import com.taoroot.service.IUserService;
 import com.taoroot.util.ConfigUtil;
 import com.taoroot.util.JwtUtil;
+import com.taoroot.vo.NewObjCountVo;
 import com.taoroot.vo.UserVo;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.taoroot.common.ResponseCode.ILLEGAL_ARGUMENT;
 
 /**
  * @author: taoroot
@@ -43,11 +40,11 @@ public class UserServiceImpl implements IUserService {
         }
         // todo  密码 MD5
         User user = userMapper.selectLogin(username, password);
-        if (user.getStatus() == StatusTypeCode.DISABLE.getCode()) {
-            return ServerResponse.createByErrorMessage("已被禁用, 请联系管理员");
-        }
         if (user == null) {
             return ServerResponse.createByErrorMessage("密码错误");
+        }
+        if (user.getStatus() == StatusTypeCode.DISABLE.getCode()) {
+            return ServerResponse.createByErrorMessage("已被禁用, 请联系管理员");
         }
         String token = JwtUtil.createJWT(user.getId(), LoginTypeCode.WEB.getDesc(), "", webValidTIME);
         return ServerResponse.createBySuccessToken("登录成功", null, token);
@@ -144,6 +141,7 @@ public class UserServiceImpl implements IUserService {
                 if (userMapper.checkEmail(str) > 0) {
                     return ServerResponse.createByError();
                 }
+                break;
             default:
                 return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), null);
         }
@@ -175,7 +173,7 @@ public class UserServiceImpl implements IUserService {
         User user = new User();
         user.setId(userId);
         if (status != StatusTypeCode.DISABLE.getCode()) {
-            if (status !=  StatusTypeCode.ONLINE.getCode()) {
+            if (status != StatusTypeCode.ONLINE.getCode()) {
                 user.setStatus(StatusTypeCode.ONLINE.getCode());
                 userMapper.updateByPrimaryKeySelective(user);
             }
@@ -184,6 +182,25 @@ public class UserServiceImpl implements IUserService {
         return false;
     }
 
+    @Override
+    public ServerResponse search(String str, int pageNum, int pageSize, String orderBy) {
+        PageHelper.startPage(pageNum, pageSize, orderBy);
+        List<User> userList = userMapper.search(str);
+        PageInfo pageResult = new PageInfo(userList);
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
+    @Override
+    public ServerResponse getNewUserCount(int type) {
+        NewObjCountVo data = new NewObjCountVo();
+        int total = 0;
+        for (int i = 0; i < 7; i++) {
+            data.getCount()[i] = userMapper.getNewUserCountByWeek(-1 * i - 1 + 7 * type);
+            total += data.getCount()[i];
+            data.setTotal(total);
+        }
+        return ServerResponse.createBySuccess(data);
+    }
 
     /**
      * 过滤敏感信息
@@ -236,5 +253,4 @@ public class UserServiceImpl implements IUserService {
         }
         return false;
     }
-
 }

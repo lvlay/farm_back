@@ -3,7 +3,6 @@ package com.taoroot.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.taoroot.common.ResponseCode;
 import com.taoroot.common.ServerResponse;
-import org.springframework.http.HttpEntity;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 

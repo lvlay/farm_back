@@ -32,7 +32,7 @@
     </bean>
 
 
-    <!--controller 异常同意处理-->
+    <!--controller 异常统一处理-->
     <bean id="exceptionResolver" class="com.taoroot.interceptor.MyExceptionHandler"/>
 
     <!--4: 扫描web相关的controller-->
@@ -48,6 +48,7 @@
             <mvc:mapping path="/*/*/*/*/*.do"/>
             <mvc:exclude-mapping path="/api/v1/user/login.do"/>
             <mvc:exclude-mapping path="/api/v1/user/register.do"/>
+            <mvc:exclude-mapping path="/api/v1/user/validation.do"/>
             <bean class="com.taoroot.interceptor.SpringMVCHandlerInterceptor"/>
         </mvc:interceptor>
         <!-- API 拦截器 -->
