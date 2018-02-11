@@ -1,9 +1,8 @@
 package com.taoroot.controller;
 
-import com.taoroot.common.RoleTypeCode;
 import com.taoroot.common.ServerResponse;
-import com.taoroot.pojo.Device;
-import com.taoroot.service.IDeviceService;
+import com.taoroot.pojo.Greenhouse;
+import com.taoroot.service.IGreenhouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,18 +14,31 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author: taoroot
- * @date: 2018/1/29
- * @description: 设备控制器
+ * @date: 2018/2/10
+ * @description:
  */
 @Controller
-@RequestMapping("/api/v1/device/")
-public class DeviceController {
+@RequestMapping("/api/v1/greenhouse/")
+public class GreenhouseController {
 
     @Autowired
-    private IDeviceService iDeviceService;
+    private IGreenhouseService iGreenhouseService;
 
     /**
-     * 获取设备列表
+     * 添加大棚
+     * @param name
+     * @param req
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "add.do", method = RequestMethod.POST)
+    public ServerResponse add(String name, HttpServletRequest req) {
+        int userId = (int) req.getAttribute("userId");
+        return iGreenhouseService.add(new Greenhouse(name), userId);
+    }
+
+      /**
+     * 获取大棚列表
      *
      * @param pageNum  页号
      * @param pageSize 页大小
@@ -42,45 +54,13 @@ public class DeviceController {
                                @RequestParam(value = "orderBy", defaultValue = "id desc") String orderBy,
                                HttpServletRequest req) {
         int userId = (int) req.getAttribute("userId");
-        return iDeviceService.getDeviceList(pageNum, pageSize, title, orderBy, userId);
+        return iGreenhouseService.getList(pageNum, pageSize, title, orderBy, userId);
     }
-
 
     @ResponseBody
     @RequestMapping(value = "list_no_page.do", method = RequestMethod.GET)
     public ServerResponse listWithPage(HttpServletRequest req) {
         int userId = (int) req.getAttribute("userId");
-        return iDeviceService.getDeviceListNoPage(userId);
+        return iGreenhouseService.getListNoPage(userId);
     }
-
-    @ResponseBody
-    @RequestMapping(value = "register.do", method = RequestMethod.POST)
-    public ServerResponse register(String did, HttpServletRequest req) {
-        int userId = (int) req.getAttribute("userId");
-        return iDeviceService.register(did, userId);
-    }
-
-    /**
-     * 将设备与大棚绑定
-     *
-     * @param did
-     * @param hid
-     * @param req
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "bind_greenhouse.do", method = RequestMethod.POST)
-    public ServerResponse bindByGreenhouse(@RequestParam(value = "did", defaultValue = "") int[] did, int hid, HttpServletRequest req) {
-        int userId = (int) req.getAttribute("userId");
-
-        return iDeviceService.bindByGreenhouse(did, hid, userId);
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "update.do", method = RequestMethod.POST)
-    public ServerResponse update(Device device, HttpServletRequest req) {
-        int userId = (int) req.getAttribute("userId");
-        return iDeviceService.update(device, userId);
-    }
-
 }

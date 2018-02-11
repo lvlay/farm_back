@@ -27,6 +27,8 @@ public class User {
 
     private String address;
 
+    private String avatar;
+
     public User(Integer id, String username, String password, String email, String phone, String question, String answer, Integer role, Date createTime, Date updateTime, Integer status, String address) {
         this.id = id;
         this.username = username;
@@ -67,6 +69,22 @@ public class User {
         this.role = role;
         this.createTime = createTime;
         this.updateTime = updateTime;
+    }
+
+    public User(Integer id, String username, String password, String email, String phone, String question, String answer, Integer role, Date createTime, Date updateTime, Integer status, String address, String avatar) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.question = question;
+        this.answer = answer;
+        this.role = role;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.status = status;
+        this.address = address;
+        this.avatar = avatar;
     }
 
     public User() {
@@ -172,6 +190,15 @@ public class User {
 
     public User setAddress(String address) {
         this.address = address;
+        return this;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public User setAvatar(String avatar) {
+        this.avatar = avatar;
         return this;
     }
 }

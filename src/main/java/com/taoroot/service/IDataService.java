@@ -9,5 +9,6 @@ import com.taoroot.common.ServerResponse;
  */
 public interface IDataService {
 
-     ServerResponse list(int id, String type, int userId);
+     ServerResponse list(int id, String type, int size, int userId);
+
 }

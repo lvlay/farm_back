@@ -15,10 +15,11 @@
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
             <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="avatar" jdbcType="VARCHAR" javaType="java.lang.String"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, username, password, email, phone, question, answer, role, create_time, update_time, status, address
+        id, username, password, email, phone, question, answer, role, create_time, update_time, status, address, avatar
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -143,6 +144,9 @@
             </if>
             <if test="role != null">
                 role = #{role,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},

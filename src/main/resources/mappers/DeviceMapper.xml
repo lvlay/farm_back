@@ -12,7 +12,7 @@
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, did, model, token, create_time, update_time
+        id, did, model, token, name, lng, lat, create_time, update_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -78,17 +78,23 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.taoroot.pojo.Device">
         update farm_device
         <set>
-            <if test="did != null">
-                did = #{did,jdbcType=VARCHAR},
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="model != null">
                 model = #{model,jdbcType=INTEGER},
             </if>
+
+            <if test="lng != null">
+                lng = #{lng,jdbcType=FLOAT},
+            </if>
+
+            <if test="lat != null">
+                lat = #{lat,jdbcType=FLOAT},
+            </if>
+
             <if test="token != null">
                 token = #{token,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateTime != null">
                 update_time = now(),
@@ -128,6 +134,16 @@
             JOIN farm_device device ON device.id = user_device.device_id
         WHERE device.did LIKE CONCAT(CONCAT('%', #{str}), '%')
               AND user.id = #{id,jdbcType=INTEGER}
+        ORDER BY id asc
+    </select>
+
+    <select id="selectListByGreenhouse" resultType="com.taoroot.pojo.Device">
+        SELECT device.*
+        FROM farm_greenhouse_device greenhouse_device
+        JOIN farm_greenhouse greenhouse ON greenhouse.id = greenhouse_device.greenhouse_id
+        JOIN farm_device device ON device.id = greenhouse_device.device_id
+        WHERE greenhouse.id = #{id,jdbcType=INTEGER}
+        ORDER BY id asc
     </select>
 
     <select id="hasDeviceByUser" resultType="java.lang.Integer">
@@ -135,6 +151,13 @@
         FROM farm_user_device
         WHERE device_id = #{deviceId,jdbcType=INTEGER}
         AND user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="hasDeviceByGreenhouse" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM farm_greenhouse_device
+        WHERE device_id = #{deviceId,jdbcType=INTEGER}
+        AND greenhouse_id = #{greenhouseId,jdbcType=INTEGER}
     </select>
 
 

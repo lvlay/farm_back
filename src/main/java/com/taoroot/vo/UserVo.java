@@ -17,9 +17,12 @@ public class UserVo {
 
     private Integer role;
 
+    private String avatar;
+
     private Date createTime;
 
     private Date updateTime;
+
 
 
 
@@ -75,5 +78,14 @@ public class UserVo {
 
     public Date getUpdateTime() {
         return updateTime;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public UserVo setAvatar(String avatar) {
+        this.avatar = avatar;
+        return this;
     }
 }

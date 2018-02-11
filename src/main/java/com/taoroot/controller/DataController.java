@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,9 +31,9 @@ public class DataController {
      */
     @ResponseBody
     @RequestMapping(value = "list.do", method = RequestMethod.GET)
-    public ServerResponse list(int id, String type, HttpServletRequest req) {
+    public ServerResponse list(int id, String type, @RequestParam(value = "size", defaultValue = "1") int size, HttpServletRequest req) {
         int userId = (int) req.getAttribute("userId");
-        return iDataService.list(id, type, userId);
+        return iDataService.list(id, type, size, userId);
     }
 
 }

@@ -11,6 +11,12 @@ public class Device {
 
     private String token;
 
+    private String name;
+
+    private float lng;
+
+    private float lat;
+
     private Date createTime;
 
     private Date updateTime;
@@ -20,6 +26,28 @@ public class Device {
         this.did = did;
         this.model = model;
         this.token = token;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
+    public Device(Integer id, String did, Integer model, String token, String name, Date createTime, Date updateTime) {
+        this.id = id;
+        this.did = did;
+        this.model = model;
+        this.token = token;
+        this.name = name;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
+    public Device(Integer id, String did, Integer model, String token, String name, float lng, float lat, Date createTime, Date updateTime) {
+        this.id = id;
+        this.did = did;
+        this.model = model;
+        this.token = token;
+        this.name = name;
+        this.lng = lng;
+        this.lat = lat;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -74,5 +102,32 @@ public class Device {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Device setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public float getLng() {
+        return lng;
+    }
+
+    public Device setLng(float lng) {
+        this.lng = lng;
+        return this;
+    }
+
+    public float getLat() {
+        return lat;
+    }
+
+    public Device setLat(float lat) {
+        this.lat = lat;
+        return this;
     }
 }

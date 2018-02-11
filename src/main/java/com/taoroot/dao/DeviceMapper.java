@@ -24,5 +24,9 @@ public interface DeviceMapper {
 
     List<Device> selectListByUser(@Param("str")String str, @Param("id")int id);
 
+    List<Device> selectListByGreenhouse(int id);
+
     int hasDeviceByUser(@Param("userId")int userId, @Param("deviceId")int deviceId);
+
+    int hasDeviceByGreenhouse(@Param("greenhouseId")int greenhouseId, @Param("deviceId")int deviceId);
 }

@@ -1,6 +1,7 @@
 package com.taoroot.dao;
 
 import com.taoroot.pojo.Humidity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,5 +18,5 @@ public interface HumidityMapper {
 
     int updateByPrimaryKey(Humidity record);
 
-    List<Humidity> selectListByDevice(int deviceId);
+    List<Humidity> selectListByDevice(@Param("deviceId")int deviceId, @Param("size")int size);
 }

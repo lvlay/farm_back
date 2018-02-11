@@ -84,9 +84,9 @@
 
 
     <select id="selectListByDevice" resultType="com.taoroot.pojo.Humidity">
-        select
+        (select
         <include refid="Base_Column_List"/>
         from farm_humidity
-        where device_id = #{device_id,jdbcType=BIGINT}
+        where device_id = #{deviceId,jdbcType=BIGINT} ORDER BY id DESC limit #{size} ) ORDER BY id ASC
     </select>
 </mapper>

@@ -28,7 +28,7 @@ public class DataServiceImpl implements IDataService {
 
 
     @Override
-    public ServerResponse list(int id, String type, int userId) {
+    public ServerResponse list(int id, String type, int size, int userId) {
 
         // 用户是否拥有设备
         if (!iDeviceService.hasDeviceByUser(userId, id)) {
@@ -37,12 +37,11 @@ public class DataServiceImpl implements IDataService {
         // 返回数据
         switch (type) {
             case "temperature":
-                return ServerResponse.createBySuccess(temperatureMapper.selectListByDevice(id));
+                return ServerResponse.createBySuccess(temperatureMapper.selectListByDevice(id, size));
             case "humidity":
-                return ServerResponse.createBySuccess(humidityMapper.selectListByDevice(id));
+                return ServerResponse.createBySuccess(humidityMapper.selectListByDevice(id, size));
             default:
                 return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), null);
         }
     }
-
 }

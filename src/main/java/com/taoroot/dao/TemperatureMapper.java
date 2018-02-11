@@ -1,6 +1,7 @@
 package com.taoroot.dao;
 
 import com.taoroot.pojo.Temperature;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,5 +18,5 @@ public interface TemperatureMapper {
 
     int updateByPrimaryKey(Temperature record);
 
-    List<Temperature> selectListByDevice(int deviceId);
+    List<Temperature> selectListByDevice(@Param("deviceId")int deviceId, @Param("size")int size);
 }

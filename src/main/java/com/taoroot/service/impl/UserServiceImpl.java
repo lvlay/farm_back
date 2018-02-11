@@ -202,6 +202,18 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createBySuccess(data);
     }
 
+    @Override
+    public boolean updatePicture(int userId, String url) {
+        User user = new User();
+        user.setId(userId);
+        user.setAvatar(url);
+        int result = userMapper.updateByPrimaryKeySelective(user);
+        if (result > 0) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 过滤敏感信息
      *
@@ -216,6 +228,7 @@ public class UserServiceImpl implements IUserService {
         userVo.setPhone(user.getPhone());
         userVo.setEmail(user.getEmail());
         userVo.setUsername(user.getUsername());
+        userVo.setAvatar(user.getAvatar());
         return userVo;
     }
 

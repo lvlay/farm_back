@@ -28,4 +28,6 @@ public interface IUserService {
     ServerResponse search(String str, int pageNum, int pageSize, String orderBy);
 
     ServerResponse getNewUserCount(int type);
+
+    boolean updatePicture(int userId, String url);
 }
