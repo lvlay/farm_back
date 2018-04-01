@@ -3,18 +3,20 @@ package com.taoroot.common;
 /**
  * Created by taoroot
  * <p>
- * 登录方式
+ * HTTP 请求类型
  */
-public enum StatusTypeCode {
+public enum RequestMethodCode {
 
-    ENABLE(0, "ENABLE"),
-    DISABLE(1, "DISABLE");
+    GET(0, "GET"),
+    POST(1, "POST"),
+    PUT(2, "PUT"),
+    DELETE(3, "DELETE");
 
     private final int code;
     private final String desc;
 
 
-    StatusTypeCode(int code, String desc) {
+    RequestMethodCode(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -26,4 +28,5 @@ public enum StatusTypeCode {
     public String getDesc() {
         return desc;
     }
+
 }

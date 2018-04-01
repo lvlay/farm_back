@@ -3,18 +3,18 @@ package com.taoroot.common;
 /**
  * Created by taoroot
  * <p>
- * 登录方式
+ * 资源类型
  */
-public enum StatusTypeCode {
+public enum ResourceTypeCode {
 
-    ENABLE(0, "ENABLE"),
-    DISABLE(1, "DISABLE");
+    FUNCTION(0, "FUNCTION"),
+    MENU(1, "MENU"),
+    ALL(2, "ALL");
 
     private final int code;
     private final String desc;
 
-
-    StatusTypeCode(int code, String desc) {
+    ResourceTypeCode(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -26,4 +26,5 @@ public enum StatusTypeCode {
     public String getDesc() {
         return desc;
     }
+
 }

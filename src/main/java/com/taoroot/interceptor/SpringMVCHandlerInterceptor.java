@@ -2,12 +2,11 @@ package com.taoroot.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.taoroot.common.ResponseCode;
-import com.taoroot.common.ServerResponse;
+import com.taoroot.vo.ServerResponse;
 import com.taoroot.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,12 +36,11 @@ public class SpringMVCHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-
         String url = httpServletRequest.getRequestURI();
-        logger.info("request url ==> " + url);
+        logger.debug("request url ==> {}", url);
 
         // 获取head中的Authorization
-        if (httpServletRequest.getMethod().equals("OPTIONS")){
+        if (httpServletRequest.getMethod().equals("OPTIONS")) {
             return false;
         }
 
@@ -53,7 +51,7 @@ public class SpringMVCHandlerInterceptor implements HandlerInterceptor {
             if (claims != null) {
                 //获取token中的用户id
                 String userId = claims.get(JwtUtil.USERID).toString();
-                httpServletRequest.setAttribute("userId",Integer.parseInt(userId));
+                httpServletRequest.setAttribute(JwtUtil.USERID, Integer.parseInt(userId));
                 return true;
             }
         }

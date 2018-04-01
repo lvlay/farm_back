@@ -23,7 +23,7 @@
         2).允许使用 "/" 做整体映射
     -->
     <mvc:default-servlet-handler/>
-    
+
     <!--3：配置JSP 显示ViewResolver-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -42,25 +42,28 @@
     <mvc:interceptors>
         <!-- token 拦截器 -->
         <mvc:interceptor>
-            <mvc:mapping path="/*/*.do"/>
-            <mvc:mapping path="/*/*/*.do"/>
-            <mvc:mapping path="/*/*/*/*.do"/>
-            <mvc:mapping path="/*/*/*/*/*.do"/>
-            <mvc:exclude-mapping path="/api/v1/user/login.do"/>
-            <mvc:exclude-mapping path="/api/v1/user/register.do"/>
+            <mvc:mapping path="/api/**"/>
+            <mvc:exclude-mapping path="/**/login"/>
+            <mvc:exclude-mapping path="/**/register"/>
+            <mvc:exclude-mapping path="/**/validation"/>
             <bean class="com.taoroot.interceptor.SpringMVCHandlerInterceptor"/>
         </mvc:interceptor>
         <!-- API 拦截器 -->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/*/*.do"/>-->
-            <!--<mvc:mapping path="/*/*/*.do"/>-->
-            <!--<mvc:mapping path="/*/*/*/*.do"/>-->
-            <!--<mvc:mapping path="/*/*/*/*/*.do"/>-->
-            <!--<mvc:exclude-mapping path="/api/v1/user/login.do"/>-->
-            <!--<mvc:exclude-mapping path="/api/v1/user/register.do"/>-->
-            <!--<bean class="com.taoroot.interceptor.PermissionsHandlerInterceptor"/>-->
-        <!--</mvc:interceptor>-->
-
+        <mvc:interceptor>
+            <mvc:mapping path="/api/**"/>
+            <mvc:exclude-mapping path="/**/login"/>
+            <mvc:exclude-mapping path="/**/register"/>
+            <mvc:exclude-mapping path="/**/validation"/>
+            <bean class="com.taoroot.interceptor.PermissionsHandlerInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
+
+
+    <!-- Swagger资源重定向(仅作为后台使用不提供静态资源) -->
+    <mvc:resources location="classpath:/META-INF/resources/" mapping="swagger-ui.html"/>
+    <mvc:resources location="classpath:/META-INF/resources/webjars/" mapping="/webjars/**"/>
+    <!--swagger2-->
+    <bean class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration"
+          id="swagger2Config"/>
 
 </beans>

@@ -1,7 +1,8 @@
-package com.taoroot.common;
+package com.taoroot.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.taoroot.common.ResponseCode;
 
 import java.io.Serializable;
 

@@ -29,9 +29,10 @@ public class JsonpFilter extends OncePerRequestFilter {
         arg1.addHeader("Access-Control-Allow-Methods", "POST,GET,PUT,DELETE,OPTIONS");
 
         // 响应头设置
-
         arg1.addHeader("Access-Control-Allow-Headers", "Authorization,Content-Type");
+        arg1.addHeader("Access-Control-Allow-Headers", "x-token");
         arg1.addHeader("Access-Control-Max-Age", "30");
+
         arg1.setHeader("Access-Control-Allow-Credentials","true"); //是否支持cookie跨域
 
 
