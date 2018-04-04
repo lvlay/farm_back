@@ -167,7 +167,7 @@ public class BaseSql<T> {
             if (annotation == null && !isFieldNull(object, filedName)) {
                 //1、获取属性上的指定类型的注释
                 if (!filedName.equals(idName) && !filedName.equals("serialVersionUID"))
-                    sql.SET(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, filedName) + "=#{object." + filedName + "}");
+                    sql.SET('`' + CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, filedName)  + "`=#{object." + filedName + "}");
             }
         }
         sql.WHERE(idName + "=#{object." + idName + "}");
